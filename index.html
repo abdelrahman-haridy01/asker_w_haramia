@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="لعبة عسكر المعاني: تحد لغوي عربي للبحث عن المعنى الصحيح من سياق الكلام." />
+    <title>عسكر المعاني</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="platform-header" aria-label="رأس الصفحة">
+        <a class="brand" href="#start-screen" data-nav="start">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="img">
+              <path d="M24 5 42 15v14c0 8-7 13-18 16C13 42 6 37 6 29V15L24 5Z" />
+              <path d="M17 22h14M17 29h14M21 15h6" />
+            </svg>
+          </span>
+          <span>
+            <strong>منصة الألعاب اللغوية</strong>
+            <small>مجمع الملك سلمان العالمي للغة العربية</small>
+          </span>
+        </a>
+        <nav class="top-actions" aria-label="تنقل سريع">
+          <button class="icon-button" type="button" data-open-menu aria-label="القائمة">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          </button>
+          <button class="button button-secondary" type="button" data-open-settings>الإعدادات</button>
+        </nav>
+      </header>
+
+      <main>
+        <section id="start-screen" class="screen screen-active start-screen" data-screen>
+          <div class="hero-copy">
+            <p class="eyebrow">لعبة لغوية تفاعلية</p>
+            <h1>عسكر المعاني</h1>
+            <p class="hero-lead">ابحث عن المعنى المختبئ داخل الجملة، واقبض عليه قبل انتهاء الوقت.</p>
+            <div class="hero-actions">
+              <button class="button button-primary" type="button" data-nav="intro">ابدأ اللعب</button>
+              <button class="button button-secondary" type="button" data-nav="instructions">التعليمات</button>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="خريطة مطاردة لغوية">
+            <svg viewBox="0 0 520 420" role="img" aria-labelledby="map-title map-desc">
+              <title id="map-title">خريطة عسكر المعاني</title>
+              <desc id="map-desc">أماكن متعددة تحتوي على معان مختبئة يبحث عنها اللاعب.</desc>
+              <rect x="24" y="24" width="472" height="372" rx="22" />
+              <path d="M76 108c74 34 126 34 194 0 58-29 92-25 166 0" />
+              <path d="M72 306c82-48 141-51 210-13 53 29 96 26 162-5" />
+              <path d="M132 66v278M266 84v272M390 72v288" />
+              <g>
+                <circle cx="132" cy="114" r="34" />
+                <text x="132" y="121">سوق</text>
+              </g>
+              <g>
+                <circle cx="390" cy="126" r="34" />
+                <text x="390" y="133">عين</text>
+              </g>
+              <g>
+                <circle cx="258" cy="232" r="42" />
+                <text x="258" y="239">معنى</text>
+              </g>
+              <g>
+                <circle cx="148" cy="318" r="34" />
+                <text x="148" y="325">دار</text>
+              </g>
+              <g>
+                <circle cx="386" cy="308" r="34" />
+                <text x="386" y="315">كتب</text>
+              </g>
+            </svg>
+          </div>
+        </section>
+
+        <section id="intro-screen" class="screen intro-screen" data-screen>
+          <div class="section-heading">
+            <p class="eyebrow">مقدمة اللعبة</p>
+            <h2>المعنى يختبئ في السياق</h2>
+            <p>في كل جولة تظهر كلمة داخل جملة. اختر المعنى الصحيح اعتمادًا على السياق أو الصيغة الصرفية.</p>
+          </div>
+          <div class="info-grid">
+            <article class="info-panel">
+              <h3>الهدف التعليمي</h3>
+              <p>تنمية فهم الدلالة العربية وتمييز المعاني المتعددة للكلمة الواحدة.</p>
+            </article>
+            <article class="info-panel">
+              <h3>المهارة المستهدفة</h3>
+              <p>السياق الدلالي، الصيغ الصرفية، والتمييز بين الحقيقة والمجاز.</p>
+            </article>
+            <article class="info-panel">
+              <h3>نمط اللعب</h3>
+              <p>مطاردة قصيرة بزمن محدد ونقاط وسلاسل إجابات صحيحة.</p>
+            </article>
+          </div>
+          <div class="screen-actions">
+            <button class="button button-primary" type="button" data-nav="players">بدء الجولة</button>
+            <button class="button button-secondary" type="button" data-nav="instructions">كيف ألعب؟</button>
+          </div>
+        </section>
+
+        <section id="instructions-screen" class="screen" data-screen>
+          <div class="section-heading">
+            <p class="eyebrow">التعليمات</p>
+            <h2>كيف تلعب؟</h2>
+            <p>اقرأ الجملة، ثم اختر المكان الذي يخبئ المعنى الصحيح للكلمة المطلوبة.</p>
+          </div>
+          <div class="rules-list">
+            <article>
+              <span>1</span>
+              <div>
+                <h3>اقرأ السياق</h3>
+                <p>الكلمة قد تحمل أكثر من معنى. الجملة تكشف المقصود.</p>
+              </div>
+            </article>
+            <article>
+              <span>2</span>
+              <div>
+                <h3>اختر بسرعة</h3>
+                <p>الإجابة الصحيحة تمنح 100 نقطة، وتزيد النقاط مع سرعة الإجابة.</p>
+              </div>
+            </article>
+            <article>
+              <span>3</span>
+              <div>
+                <h3>حافظ على السلسلة</h3>
+                <p>كل إجابتين صحيحتين متتاليتين تمنحان مكافأة إضافية.</p>
+              </div>
+            </article>
+            <article>
+              <span>4</span>
+              <div>
+                <h3>انتقل للمستوى التالي</h3>
+                <p>تنتهي الجولة بعد ست مطاردات، ثم تظهر نتيجتك في الصدارة.</p>
+              </div>
+            </article>
+          </div>
+          <div class="screen-actions">
+            <button class="button button-primary" type="button" data-nav="players">فهمت</button>
+            <button class="button button-secondary" type="button" data-nav="start">العودة</button>
+          </div>
+        </section>
+
+        <section id="players-screen" class="screen" data-screen>
+          <div class="section-heading">
+            <p class="eyebrow">اللاعبون المنضمون</p>
+            <h2>جهز الدورية</h2>
+            <p>أدخل اسمك، ثم ابدأ مطاردة المعاني المختبئة.</p>
+          </div>
+          <div class="join-layout">
+            <form class="player-form" id="player-form">
+              <label for="player-name">اسم اللاعب</label>
+              <input id="player-name" name="playerName" type="text" maxlength="18" value="لاعب العربية" required />
+              <label for="difficulty">مستوى الصعوبة</label>
+              <select id="difficulty" name="difficulty">
+                <option value="easy">سهل</option>
+                <option value="medium" selected>متوسط</option>
+                <option value="hard">متقدم</option>
+              </select>
+              <button class="button button-primary" type="submit">متابعة</button>
+            </form>
+            <div class="players-list" aria-label="قائمة اللاعبين">
+              <article class="player-card player-current">
+                <span class="avatar">أ</span>
+                <div>
+                  <h3 id="preview-player-name">لاعب العربية</h3>
+                  <p>جاهز</p>
+                </div>
+              </article>
+              <article class="player-card">
+                <span class="avatar avatar-alt">م</span>
+                <div>
+                  <h3>محقق السياق</h3>
+                  <p>منضم</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="loading-screen" class="screen" data-screen>
+          <div class="loading-box">
+            <div class="loader-mark" aria-hidden="true">
+              <svg viewBox="0 0 96 96">
+                <path d="M48 10 80 28v25c0 18-13 28-32 34-19-6-32-16-32-34V28L48 10Z" />
+                <path d="M33 48h30M39 60h18M39 36h18" />
+              </svg>
+            </div>
+            <h2>جاري تجهيز المطاردة</h2>
+            <p id="loading-message">نرتب المعاني داخل الخريطة.</p>
+            <div class="progress-track" aria-label="تحميل اللعبة">
+              <span id="loading-bar"></span>
+            </div>
+            <strong id="loading-percent">0%</strong>
+          </div>
+        </section>
+
+        <section id="game-screen" class="screen game-screen" data-screen>
+          <div class="game-status">
+            <div>
+              <span>النقاط</span>
+              <strong id="score-value">0</strong>
+            </div>
+            <div>
+              <span>الوقت</span>
+              <strong id="time-value">45</strong>
+            </div>
+            <div>
+              <span>المرحلة</span>
+              <strong id="stage-value">1 / 6</strong>
+            </div>
+            <button class="icon-button pause-button" type="button" data-open-menu aria-label="إيقاف مؤقت">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
+            </button>
+          </div>
+
+          <div class="challenge-board">
+            <section class="question-area" aria-live="polite">
+              <p class="eyebrow" id="skill-label">السياق الدلالي</p>
+              <h2 id="target-word">عين</h2>
+              <p id="sentence-text">شرب المسافر من عين الماء.</p>
+              <button class="button button-secondary hint-button" type="button" id="hint-button">بلاغ من العسكر</button>
+              <p class="hint-text" id="hint-text" hidden></p>
+            </section>
+
+            <section class="hideouts" id="choices-list" aria-label="أماكن المعاني المختبئة"></section>
+          </div>
+
+          <div class="feedback" id="feedback" aria-live="polite" hidden></div>
+        </section>
+
+        <section id="win-screen" class="screen" data-screen>
+          <div class="result-layout">
+            <div class="result-badge" aria-hidden="true">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="48" />
+                <path d="M41 61 54 74l27-31" />
+              </svg>
+            </div>
+            <div class="section-heading">
+              <p class="eyebrow">انتهت الجولة</p>
+              <h2 id="result-title">أحسنت</h2>
+              <p id="result-summary">قبضت على معظم المعاني المختبئة.</p>
+            </div>
+            <div class="result-stats">
+              <article>
+                <span>النقاط المكتسبة</span>
+                <strong id="final-score">0</strong>
+              </article>
+              <article>
+                <span>الإجابات الصحيحة</span>
+                <strong id="final-correct">0</strong>
+              </article>
+              <article>
+                <span>الشارة</span>
+                <strong id="final-badge">محقق المعاني</strong>
+              </article>
+            </div>
+            <div class="screen-actions">
+              <button class="button button-primary" type="button" data-restart>إعادة اللعب</button>
+              <button class="button button-secondary" type="button" data-nav="leaderboard">عرض الصدارة</button>
+              <button class="button button-secondary" type="button" data-nav="start">القائمة</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="leaderboard-screen" class="screen" data-screen>
+          <div class="section-heading">
+            <p class="eyebrow">لوحة الصدارة</p>
+            <h2>ترتيب المطاردين</h2>
+            <p>يعرض الجدول أفضل النتائج المحفوظة على هذا الجهاز.</p>
+          </div>
+          <div class="filters" role="tablist" aria-label="تصفية الصدارة">
+            <button class="filter-active" type="button" data-filter="all">الكل</button>
+            <button type="button" data-filter="single">تصنيف</button>
+            <button type="button" data-filter="active">نشطة</button>
+            <button type="button" data-filter="ended">منتهية</button>
+          </div>
+          <div class="leaderboard" id="leaderboard-list" aria-live="polite"></div>
+          <div class="screen-actions">
+            <button class="button button-primary" type="button" data-restart>ابدأ من جديد</button>
+            <button class="button button-secondary" type="button" data-nav="start">العودة للقائمة</button>
+          </div>
+        </section>
+      </main>
+
+      <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+    </div>
+
+    <dialog class="modal" id="menu-modal" aria-labelledby="menu-title">
+      <div class="modal-header">
+        <h2 id="menu-title">القائمة</h2>
+        <button class="icon-button" type="button" data-close-modal aria-label="إغلاق">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <div class="modal-actions">
+        <button class="button button-primary" type="button" data-close-modal>استئناف اللعب</button>
+        <button class="button button-secondary" type="button" data-restart>إعادة المحاولة</button>
+        <button class="button button-secondary" type="button" data-nav="instructions">التعليمات</button>
+        <button class="button button-secondary" type="button" data-open-settings>الإعدادات</button>
+        <button class="button button-delete" type="button" data-nav="start">الخروج من اللعبة</button>
+      </div>
+    </dialog>
+
+    <dialog class="modal" id="settings-modal" aria-labelledby="settings-title">
+      <div class="modal-header">
+        <h2 id="settings-title">الإعدادات</h2>
+        <button class="icon-button" type="button" data-close-modal aria-label="إغلاق">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <form class="settings-form" id="settings-form">
+        <label class="switch-row">
+          <span>تشغيل الصوت</span>
+          <input type="checkbox" id="sound-toggle" checked />
+        </label>
+        <label class="switch-row">
+          <span>تشغيل المؤثرات</span>
+          <input type="checkbox" id="effects-toggle" checked />
+        </label>
+        <label for="text-size">حجم النص</label>
+        <select id="text-size">
+          <option value="normal" selected>قياسي</option>
+          <option value="large">كبير</option>
+        </select>
+        <label for="settings-difficulty">مستوى الصعوبة</label>
+        <select id="settings-difficulty">
+          <option value="easy">سهل</option>
+          <option value="medium" selected>متوسط</option>
+          <option value="hard">متقدم</option>
+        </select>
+        <div class="modal-actions compact">
+          <button class="button button-primary" type="submit">حفظ</button>
+          <button class="button button-secondary" type="button" data-close-modal>إلغاء</button>
+          <button class="button button-disabled" type="button" disabled>معطل</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
