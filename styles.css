@@ -582,7 +582,7 @@ select:disabled {
 
 .challenge-board {
   display: grid;
-  grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1.15fr);
+  grid-template-columns: minmax(280px, 0.72fr) minmax(360px, 1.28fr);
   gap: var(--space-lg);
   align-items: start;
 }
@@ -592,15 +592,54 @@ select:disabled {
   border-radius: var(--radius-play-card);
 }
 
-.question-area h2 {
+.wanted-poster {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+  padding: var(--space-lg);
+  color: #fff;
+  background:
+    linear-gradient(135deg, rgba(183, 79, 59, 0.86), rgba(15, 107, 87, 0.94)),
+    var(--color-primary);
+  border-radius: var(--radius-play-card);
+}
+
+.wanted-poster::after {
+  content: "";
+  position: absolute;
+  inset: auto -20px -36px auto;
+  width: 140px;
+  height: 140px;
+  border: 18px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+}
+
+.wanted-poster span,
+.case-file span {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+}
+
+.wanted-poster h2 {
+  position: relative;
+  z-index: 1;
   margin: 0 0 var(--space-md);
-  color: var(--color-primary);
   font-size: 60px;
   font-weight: 600;
   line-height: 72px;
 }
 
-.question-area > p:not(.eyebrow):not(.hint-text) {
+.case-file {
+  padding: var(--space-md);
+  background: var(--color-panel);
+  border: 1px dashed rgba(15, 107, 87, 0.38);
+  border-radius: var(--radius-league-card);
+}
+
+.case-file p {
   margin: 0;
   color: var(--color-ink);
   font-size: 18px;
@@ -621,23 +660,68 @@ select:disabled {
   line-height: 24px;
 }
 
+.map-zone {
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+  padding: var(--space-lg);
+  background:
+    radial-gradient(circle at 18% 22%, rgba(201, 150, 44, 0.18), transparent 24%),
+    radial-gradient(circle at 78% 75%, rgba(45, 111, 159, 0.14), transparent 28%),
+    var(--color-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-play-card);
+  box-shadow: var(--shadow);
+}
+
+.map-road {
+  position: absolute;
+  inset: 58px 42px;
+  border: 4px dashed rgba(15, 107, 87, 0.18);
+  border-radius: 46% 54% 44% 56%;
+  transform: rotate(-7deg);
+}
+
+.map-zone::before,
+.map-zone::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 96px;
+  border: 4px solid rgba(201, 150, 44, 0.2);
+  border-radius: 50%;
+}
+
+.map-zone::before {
+  inset: 54px auto auto 40px;
+  transform: rotate(16deg);
+}
+
+.map-zone::after {
+  inset: auto 44px 52px auto;
+  transform: rotate(-12deg);
+}
+
 .hideouts {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-md);
 }
 
 .hideout-card {
-  min-height: 176px;
+  position: relative;
+  min-height: 218px;
   padding: var(--space-md);
   text-align: right;
   border-radius: var(--radius-play-card);
-  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
 }
 
 .hideout-card:hover {
   border-color: rgba(15, 107, 87, 0.5);
-  transform: translateY(-2px);
+  transform: translateY(-3px) rotate(-0.4deg);
   box-shadow: var(--shadow);
 }
 
@@ -650,11 +734,13 @@ select:disabled {
 .hideout-card.correct {
   border-color: var(--color-success);
   background: #ebf7f1;
+  animation: capturePulse 520ms ease;
 }
 
 .hideout-card.wrong {
   border-color: var(--color-danger);
   background: var(--color-danger-soft);
+  animation: missShake 360ms ease;
 }
 
 .hideout-illustration {
@@ -683,6 +769,100 @@ select:disabled {
   font-size: 14px;
   font-weight: 700;
   line-height: 21px;
+}
+
+.suspect-strip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.suspect-token {
+  position: relative;
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  background: var(--color-ink);
+  border-radius: 50% 50% 45% 45%;
+}
+
+.suspect-token::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  width: 12px;
+  height: 5px;
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+
+.suspect-strip strong {
+  color: var(--color-primary);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.dispatch-command {
+  position: absolute;
+  inset: auto var(--space-md) var(--space-md) var(--space-md);
+  display: grid;
+  min-height: 36px;
+  place-items: center;
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: var(--radius-button);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+}
+
+.revealed-meaning {
+  display: block;
+  min-height: 21px;
+  margin-top: var(--space-md);
+  padding-bottom: 38px;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.hideout-card[disabled] .dispatch-command {
+  background: #839391;
+}
+
+.hideout-card.correct .dispatch-command {
+  background: var(--color-success);
+}
+
+.hideout-card.wrong .dispatch-command {
+  background: var(--color-danger);
+}
+
+@keyframes capturePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes missShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  35% {
+    transform: translateX(6px);
+  }
+  70% {
+    transform: translateX(-6px);
+  }
 }
 
 .feedback {
@@ -973,7 +1153,7 @@ select:disabled {
   }
 
   .hero-copy h1,
-  .question-area h2 {
+  .wanted-poster h2 {
     font-size: 32px;
     line-height: 40px;
   }
@@ -995,6 +1175,11 @@ select:disabled {
   .hideouts,
   .result-stats {
     grid-template-columns: 1fr;
+  }
+
+  .map-zone {
+    min-height: auto;
+    padding: var(--space-md);
   }
 
   .game-status {
@@ -1042,7 +1227,7 @@ select:disabled {
     width: 100%;
   }
 
-  .question-area > p:not(.eyebrow):not(.hint-text),
+  .case-file p,
   .loading-box p,
   .feedback {
     font-size: 14px;

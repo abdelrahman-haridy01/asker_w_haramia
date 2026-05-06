@@ -214,6 +214,49 @@ const placeIcons = {
   "الخريطة": "M14 38V14l12-4 12 4 12-4v24l-12 4-12-4-12 4ZM26 10v24M38 14v24"
 };
 
+const clueBook = {
+  "نبع الماء": "أثر ماء جار وخريطة تشير إلى مصدره.",
+  "عضو البصر": "أثر رؤية ونظر ومراقبة.",
+  "الشخص ذاته": "أثر يؤكد عين الشيء لا غيره.",
+  "الجاسوس": "أثر مراقبة سرية بين الناس.",
+  "قاد ودفع أمامه": "أثر حركة تقود القطيع إلى جهة محددة.",
+  "جزء من الجسد": "أثر يخص القدم والحركة.",
+  "جذع النبات": "أثر نبات قائم فوق الأرض.",
+  "روى الخبر": "أثر حكاية تنتقل من راو إلى آخر.",
+  "مكان العمل أو الكتابة": "أثر طاولة ووثائق وأقلام.",
+  "الشيء المكتوب": "أثر ورقة انتهت عليها الكتابة.",
+  "من يكتب": "أثر شخص يمسك القلم.",
+  "عملية الكتابة": "أثر فعل يحدث بالقلم والحرف.",
+  "تهلل وظهر عليه السرور": "أثر وجه منير بالفرح.",
+  "طلع ضوء الشمس": "أثر صباح وضوء ينتشر.",
+  "صار في جهة الشرق": "أثر اتجاه على البوصلة.",
+  "اشتد حر النهار": "أثر شمس وحرارة.",
+  "حكم وفصل": "أثر حكم بين خصمين.",
+  "أنهى وقته": "أثر وقت مضى وانتهى.",
+  "مات": "أثر حياة انقطعت.",
+  "أدى الدين": "أثر مال مستحق تم دفعه.",
+  "أداة للإسناد والحمل": "أثر قاعدة تحمل شيئًا فوقها.",
+  "امرأة تنتظر مولودًا": "أثر وصف لحالة إنسانية.",
+  "من يحمل رسالة": "أثر شخص يحمل شيئًا ويوصله.",
+  "صفة للثقل": "أثر وزن يصعب حمله.",
+  "استنبط وأظهر": "أثر فكرة أخرجت من النص.",
+  "حفر المعدن فقط": "أثر معدن خرج من الأرض.",
+  "خرج مسرعًا": "أثر مغادرة المكان.",
+  "نسخ النص": "أثر نقل الحروف كما هي.",
+  "البيان والكلام": "أثر صوت وعبارة مؤثرة.",
+  "عضو في الفم": "أثر عضو ينطق ويتذوق.",
+  "طرف اليابسة الممتد في البحر": "أثر أرض تمتد داخل الماء.",
+  "نوع من الطعام": "أثر طبق معروف في المطبخ.",
+  "سبب الوصول": "أثر طريق يفتح باب النتيجة.",
+  "أداة فتح القفل": "أثر قفل وباب مغلق.",
+  "زر التشغيل": "أثر آلة تبدأ بالضغط.",
+  "رمز الإيضاح": "أثر علامة تشرح الخريطة."
+};
+
+function getClue(meaning) {
+  return clueBook[meaning] || "أثر لغوي يحتاج إلى تدقيق في السياق.";
+}
+
 function showScreen(name) {
   state.pausedByModal = false;
   screens.forEach((screen) => {
@@ -322,7 +365,7 @@ function startGame() {
   showScreen("game");
   renderChallenge();
   startTimer();
-  showToast("info", "بدأت الجولة", "ابحث عن المعنى الصحيح.");
+  showToast("info", "بدأت المطاردة", "تتبع الأثر وأرسل الدورية.");
 }
 
 function restartGame() {
@@ -384,13 +427,18 @@ function renderChallenge() {
     button.dataset.meaning = meaning;
     button.innerHTML = `
       <div class="hideout-illustration">
-        <span class="hideout-tag">${place}</span>
+        <span class="hideout-tag">موقع مشتبه: ${place}</span>
         <svg viewBox="0 0 64 52" aria-hidden="true">
           <path d="${placeIcons[place] || placeIcons["الساحة"]}"></path>
         </svg>
       </div>
-      <h3>${meaning}</h3>
-      <p>اضغط لاختيار هذا المعنى.</p>
+      <div class="suspect-strip">
+        <span class="suspect-token" aria-hidden="true"></span>
+        <strong>أثر لغوي</strong>
+      </div>
+      <p>${getClue(meaning)}</p>
+      <span class="dispatch-command">أرسل الدورية</span>
+      <small class="revealed-meaning" aria-live="polite"></small>
     `;
     button.addEventListener("click", () => chooseAnswer(button, challenge));
     choicesList.append(button);
@@ -411,6 +459,7 @@ function chooseAnswer(button, challenge) {
     if (card.dataset.meaning === challenge.answer) {
       card.classList.add("correct");
     }
+    card.querySelector(".revealed-meaning").textContent = `المعنى: ${card.dataset.meaning}`;
   });
 
   if (isCorrect) {
@@ -421,15 +470,15 @@ function chooseAnswer(button, challenge) {
     state.score += 100 + speedBonus + streakBonus;
     feedback.className = "feedback success";
     feedback.textContent = streakBonus
-      ? "إجابة صحيحة. حصلت على مكافأة سلسلة."
-      : "إجابة صحيحة. انتقل إلى المطاردة التالية.";
-    showToast("success", "إجابة صحيحة", "قبضت على المعنى المختبئ.");
+      ? "قبض ناجح. حصلت على مكافأة سلسلة."
+      : "قبض ناجح. انتقل إلى المطاردة التالية.";
+    showToast("success", "قبض ناجح", "أمسكت بالمعنى الهارب.");
   } else {
     state.streak = 0;
     button.classList.add("wrong");
     feedback.className = "feedback error";
-    feedback.textContent = `إجابة غير صحيحة. المعنى المناسب هو: ${challenge.answer}.`;
-    showToast("error", "إجابة غير صحيحة", "انتبه إلى سياق الجملة.");
+    feedback.textContent = `هرب المعنى من هذا الموقع. كان مختبئًا عند: ${challenge.answer}.`;
+    showToast("error", "لم تنجح المطاردة", "اتبع أثر السياق في الجولة التالية.");
   }
 
   feedback.hidden = false;

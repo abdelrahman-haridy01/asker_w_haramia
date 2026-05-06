@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="لعبة عسكر المعاني: تحد لغوي عربي للبحث عن المعنى الصحيح من سياق الكلام." />
+    <meta name="description" content="لعبة عسكر المعاني: مطاردة لغوية عربية للقبض على المعنى الهارب من سياق الكلام." />
     <title>عسكر المعاني</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -77,7 +77,7 @@
           <div class="section-heading">
             <p class="eyebrow">مقدمة اللعبة</p>
             <h2>المعنى يختبئ في السياق</h2>
-            <p>في كل جولة تظهر كلمة داخل جملة. اختر المعنى الصحيح اعتمادًا على السياق أو الصيغة الصرفية.</p>
+            <p>في كل جولة يهرب معنى من كلمة عربية. اقرأ البلاغ، تتبع الأثر، ثم أرسل الدورية إلى الموقع المناسب.</p>
           </div>
           <div class="info-grid">
             <article class="info-panel">
@@ -90,7 +90,7 @@
             </article>
             <article class="info-panel">
               <h3>نمط اللعب</h3>
-              <p>مطاردة قصيرة بزمن محدد ونقاط وسلاسل إجابات صحيحة.</p>
+              <p>مطاردة قصيرة بزمن محدد ونقاط وسلاسل قبض ناجحة.</p>
             </article>
           </div>
           <div class="screen-actions">
@@ -103,7 +103,7 @@
           <div class="section-heading">
             <p class="eyebrow">التعليمات</p>
             <h2>كيف تلعب؟</h2>
-            <p>اقرأ الجملة، ثم اختر المكان الذي يخبئ المعنى الصحيح للكلمة المطلوبة.</p>
+            <p>اقرأ البلاغ، وافحص آثار المواقع، ثم أرسل الدورية إلى مخبأ المعنى الهارب.</p>
           </div>
           <div class="rules-list">
             <article>
@@ -116,15 +116,15 @@
             <article>
               <span>2</span>
               <div>
-                <h3>اختر بسرعة</h3>
-                <p>الإجابة الصحيحة تمنح 100 نقطة، وتزيد النقاط مع سرعة الإجابة.</p>
+                <h3>أرسل الدورية</h3>
+                <p>القبض الناجح يمنح 100 نقطة، وتزيد النقاط كلما تحركت أسرع.</p>
               </div>
             </article>
             <article>
               <span>3</span>
               <div>
                 <h3>حافظ على السلسلة</h3>
-                <p>كل إجابتين صحيحتين متتاليتين تمنحان مكافأة إضافية.</p>
+                <p>كل عمليتي قبض متتاليتين تمنحان مكافأة إضافية.</p>
               </div>
             </article>
             <article>
@@ -216,14 +216,23 @@
 
           <div class="challenge-board">
             <section class="question-area" aria-live="polite">
-              <p class="eyebrow" id="skill-label">السياق الدلالي</p>
-              <h2 id="target-word">عين</h2>
-              <p id="sentence-text">شرب المسافر من عين الماء.</p>
-              <button class="button button-secondary hint-button" type="button" id="hint-button">بلاغ من العسكر</button>
+              <p class="eyebrow" id="skill-label">بلاغ الدورية</p>
+              <div class="wanted-poster">
+                <span>المعنى الهارب</span>
+                <h2 id="target-word">عين</h2>
+              </div>
+              <div class="case-file">
+                <span>آخر ظهور في الجملة</span>
+                <p id="sentence-text">شرب المسافر من عين الماء.</p>
+              </div>
+              <button class="button button-secondary hint-button" type="button" id="hint-button">افحص الأثر</button>
               <p class="hint-text" id="hint-text" hidden></p>
             </section>
 
-            <section class="hideouts" id="choices-list" aria-label="أماكن المعاني المختبئة"></section>
+            <section class="map-zone" aria-label="خريطة المطاردة">
+              <div class="map-road" aria-hidden="true"></div>
+              <div class="hideouts" id="choices-list" aria-label="أماكن اختباء المعاني"></div>
+            </section>
           </div>
 
           <div class="feedback" id="feedback" aria-live="polite" hidden></div>
@@ -248,7 +257,7 @@
                 <strong id="final-score">0</strong>
               </article>
               <article>
-                <span>الإجابات الصحيحة</span>
+                <span>عمليات القبض</span>
                 <strong id="final-correct">0</strong>
               </article>
               <article>
