@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>عسكر المعاني | لعبة عسكر وحرامية</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell" aria-live="polite">
+      <section class="screen start-screen is-active" id="start-screen" data-screen="start">
+        <div class="start-layout">
+          <div class="start-copy">
+            <div class="game-mark" aria-hidden="true">
+              <span class="mark-shield">★</span>
+              <span class="mark-text">دورية</span>
+            </div>
+            <h1>عسكر المعاني</h1>
+            <p>
+              طارد المعنى الصحيح داخل الجملة، واقبض عليه قبل أن يهرب إلى مكان آخر في الخريطة.
+            </p>
+            <div class="start-actions">
+              <button class="btn btn-primary" type="button" data-action="start">
+                <span class="btn-icon" aria-hidden="true">▶</span>
+                ابدأ الدورية
+              </button>
+              <button class="btn btn-ghost" type="button" data-action="instructions">
+                <span class="btn-icon" aria-hidden="true">؟</span>
+                التعليمات
+              </button>
+              <button class="btn btn-ghost" type="button" data-action="settings">
+                <span class="btn-icon" aria-hidden="true">⚙</span>
+                الإعدادات
+              </button>
+              <button class="btn btn-ghost" type="button" data-action="leaderboard">
+                <span class="btn-icon" aria-hidden="true">🏆</span>
+                الصدارة
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-board" aria-label="خريطة لعبة عسكر المعاني">
+            <svg class="hero-map-image" viewBox="0 0 620 420" role="img" aria-label="دورية تتحرك في مدينة المعاني">
+              <defs>
+                <linearGradient id="street" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="#2e6155" />
+                  <stop offset="1" stop-color="#233b52" />
+                </linearGradient>
+                <pattern id="sandPattern" width="22" height="22" patternUnits="userSpaceOnUse">
+                  <path d="M0 16 C7 10 14 22 22 14" fill="none" stroke="#d6a95e" stroke-width="2" opacity=".55" />
+                </pattern>
+              </defs>
+              <rect width="620" height="420" rx="8" fill="#f5eddb" />
+              <path d="M30 285 C120 210 195 320 275 240 C360 155 420 230 570 145" fill="none" stroke="url(#street)" stroke-width="54" stroke-linecap="round" />
+              <path d="M30 285 C120 210 195 320 275 240 C360 155 420 230 570 145" fill="none" stroke="#f4d56e" stroke-width="5" stroke-dasharray="22 18" stroke-linecap="round" />
+              <rect x="38" y="48" width="132" height="92" rx="8" fill="#d75142" />
+              <rect x="58" y="82" width="24" height="58" fill="#fde7b2" />
+              <rect x="97" y="82" width="24" height="58" fill="#fde7b2" />
+              <rect x="136" y="82" width="24" height="58" fill="#fde7b2" />
+              <path d="M28 52 H180 L104 16 Z" fill="#8c2e34" />
+              <text x="104" y="115" text-anchor="middle" font-size="34">🛒</text>
+
+              <rect x="224" y="38" width="142" height="104" rx="8" fill="#348f7c" />
+              <rect x="250" y="72" width="32" height="70" fill="#eff8f1" />
+              <rect x="308" y="72" width="32" height="70" fill="#eff8f1" />
+              <path d="M218 44 H372 L295 5 Z" fill="#226353" />
+              <text x="295" y="118" text-anchor="middle" font-size="34">🏫</text>
+
+              <rect x="440" y="230" width="132" height="95" rx="8" fill="#5a4bb7" />
+              <rect x="458" y="254" width="28" height="70" fill="#efe6ff" />
+              <rect x="501" y="254" width="28" height="70" fill="#efe6ff" />
+              <rect x="544" y="254" width="28" height="70" fill="#efe6ff" />
+              <text x="506" y="309" text-anchor="middle" font-size="34">⚖</text>
+
+              <path d="M36 346 H212 V405 H36 Z" fill="#3279a8" />
+              <path d="M36 346 C70 322 115 325 153 346 C174 357 194 352 212 342 V405 H36 Z" fill="#68b4d9" />
+              <rect x="74" y="300" width="68" height="52" rx="8" fill="#c46d3a" />
+              <path d="M70 300 L143 300 L113 260 Z" fill="#f2c75c" />
+              <text x="119" y="386" text-anchor="middle" font-size="34">⚓</text>
+
+              <rect x="260" y="282" width="128" height="80" rx="8" fill="url(#sandPattern)" />
+              <path d="M251 362 C300 318 344 320 399 362 Z" fill="#d89f45" />
+              <circle cx="338" cy="316" r="22" fill="#e8bd65" />
+              <text x="326" y="357" text-anchor="middle" font-size="34">⛺</text>
+
+              <rect x="435" y="48" width="124" height="92" rx="8" fill="#d9a227" />
+              <rect x="455" y="74" width="84" height="50" rx="4" fill="#fff3c2" />
+              <path d="M455 74 L497 44 L539 74 Z" fill="#b6752f" />
+              <text x="498" y="116" text-anchor="middle" font-size="34">📚</text>
+
+              <g class="wanted-shadow">
+                <circle cx="420" cy="185" r="31" fill="#2a2b35" opacity=".22" />
+                <path d="M388 225 C398 198 443 198 454 225 Z" fill="#2a2b35" opacity=".22" />
+                <text x="421" y="197" text-anchor="middle" font-size="30">؟</text>
+              </g>
+              <g class="hero-patrol">
+                <rect x="-36" y="-17" width="72" height="34" rx="8" fill="#f8f3e8" />
+                <rect x="-22" y="-29" width="41" height="18" rx="6" fill="#48a6c8" />
+                <rect x="-29" y="-17" width="18" height="34" rx="4" fill="#d83b3b" />
+                <rect x="11" y="-17" width="18" height="34" rx="4" fill="#2b74d6" />
+                <circle cx="-20" cy="20" r="8" fill="#252a33" />
+                <circle cx="20" cy="20" r="8" fill="#252a33" />
+                <circle class="siren-red" cx="-8" cy="-31" r="5" fill="#d83b3b" />
+                <circle class="siren-blue" cx="8" cy="-31" r="5" fill="#2b74d6" />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="feature-strip" aria-label="ملخص أنظمة اللعب">
+          <div>
+            <strong>سلاسل</strong>
+            <span>مضاعفات نقاط</span>
+          </div>
+          <div>
+            <strong>بلاغات</strong>
+            <span>تلميحات محدودة</span>
+          </div>
+          <div>
+            <strong>شارات</strong>
+            <span>إنجازات دورية</span>
+          </div>
+          <div>
+            <strong>صدارة</strong>
+            <span>حفظ محلي للنتائج</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen plain-screen" id="instructions-screen" data-screen="instructions">
+        <header class="screen-header">
+          <button class="icon-btn" type="button" data-action="home" aria-label="العودة للرئيسية">⌂</button>
+          <div>
+            <p class="eyebrow">ملف الدورية</p>
+            <h2>كيف تلعب؟</h2>
+          </div>
+        </header>
+        <div class="instruction-grid">
+          <article>
+            <span class="step-icon" aria-hidden="true">🔎</span>
+            <h3>اقرأ السياق</h3>
+            <p>الكلمة المستهدفة مميزة داخل الجملة. المعنى الصحيح يتضح من الكلمات المحيطة والصيغة.</p>
+          </article>
+          <article>
+            <span class="step-icon" aria-hidden="true">🗺</span>
+            <h3>اختر المكان</h3>
+            <p>كل بطاقة تمثل معنى مختبئًا في موقع على الخريطة. اختر البطاقة التي تناسب الجملة.</p>
+          </article>
+          <article>
+            <span class="step-icon" aria-hidden="true">🚓</span>
+            <h3>اقبض بسرعة</h3>
+            <p>الإجابة الصحيحة تمنح نقاطًا، والسرعة والسلاسل الصحيحة ترفع المضاعف.</p>
+          </article>
+          <article>
+            <span class="step-icon" aria-hidden="true">📣</span>
+            <h3>استخدم البلاغ</h3>
+            <p>لديك تلميحات محدودة تكشف إشارة سياقية وتبعد خيارًا ضعيفًا.</p>
+          </article>
+        </div>
+        <div class="screen-actions">
+          <button class="btn btn-primary" type="button" data-action="start">
+            <span class="btn-icon" aria-hidden="true">▶</span>
+            ابدأ الآن
+          </button>
+          <button class="btn btn-ghost" type="button" data-action="settings">
+            <span class="btn-icon" aria-hidden="true">⚙</span>
+            الإعدادات
+          </button>
+        </div>
+      </section>
+
+      <section class="screen plain-screen" id="settings-screen" data-screen="settings">
+        <header class="screen-header">
+          <button class="icon-btn" type="button" data-action="home" aria-label="العودة للرئيسية">⌂</button>
+          <div>
+            <p class="eyebrow">تجهيز الدورية</p>
+            <h2>الإعدادات</h2>
+          </div>
+        </header>
+
+        <form class="settings-form" id="settings-form">
+          <label class="field">
+            <span>اسم القائد</span>
+            <input id="player-name" name="playerName" maxlength="18" autocomplete="off" value="قائد الدورية" />
+          </label>
+
+          <fieldset class="field-group">
+            <legend>وضع اللعب</legend>
+            <div class="segmented" role="radiogroup" aria-label="وضع اللعب">
+              <button class="segment is-selected" type="button" data-mode="patrol" aria-pressed="true">دورية</button>
+              <button class="segment" type="button" data-mode="timed" aria-pressed="false">تحدي زمني</button>
+              <button class="segment" type="button" data-mode="quick" aria-pressed="false">سريع</button>
+            </div>
+          </fieldset>
+
+          <label class="field">
+            <span>مستوى الصعوبة</span>
+            <select id="difficulty">
+              <option value="all">متدرج</option>
+              <option value="1">واضح من السياق</option>
+              <option value="2">متعدد المعاني</option>
+              <option value="3">صرف وإعراب</option>
+              <option value="4">مجاز وتركيب معقد</option>
+            </select>
+          </label>
+
+          <label class="field slider-field">
+            <span>عدد الجولات</span>
+            <output id="round-count-output" for="round-count">10</output>
+            <input id="round-count" type="range" min="6" max="18" step="2" value="10" />
+          </label>
+
+          <label class="toggle-row">
+            <input id="animation-toggle" type="checkbox" checked />
+            <span>تشغيل الحركة والمؤثرات</span>
+          </label>
+
+          <div class="screen-actions">
+            <button class="btn btn-primary" type="button" data-action="start">
+              <span class="btn-icon" aria-hidden="true">▶</span>
+              بدء الدورية
+            </button>
+            <button class="btn btn-ghost" type="button" data-action="home">
+              <span class="btn-icon" aria-hidden="true">⌂</span>
+              الرئيسية
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="screen loading-screen" id="loading-screen" data-screen="loading">
+        <div class="loading-badge" aria-hidden="true">
+          <span class="loading-car">🚓</span>
+          <span class="loading-shadow">؟</span>
+        </div>
+        <h2>تجهيز الخريطة...</h2>
+        <p id="loading-line">توزيع المعاني على المواقع</p>
+        <div class="loading-track">
+          <span id="loading-progress"></span>
+        </div>
+      </section>
+
+      <section class="screen game-screen" id="game-screen" data-screen="game">
+        <header class="hud">
+          <button class="icon-btn" type="button" data-action="home" aria-label="إنهاء الدورية والعودة للرئيسية">⌂</button>
+          <div class="hud-pill">
+            <span>النقاط</span>
+            <strong id="score-value">0</strong>
+          </div>
+          <div class="hud-pill">
+            <span>السلسلة</span>
+            <strong id="streak-value">0</strong>
+          </div>
+          <div class="hud-pill">
+            <span>المضاعف</span>
+            <strong id="multiplier-value">×1</strong>
+          </div>
+          <div class="hud-pill timer-pill">
+            <span>الوقت</span>
+            <strong id="timer-value">20</strong>
+          </div>
+        </header>
+
+        <div class="round-bar" aria-label="تقدم الجولات">
+          <span id="round-progress"></span>
+          <strong id="round-label">1 / 10</strong>
+        </div>
+
+        <div class="game-layout">
+          <aside class="patrol-map" aria-label="خريطة الدوريات">
+            <div class="map-title">
+              <span>خريطة البلاغ</span>
+              <strong id="district-name">السوق</strong>
+            </div>
+            <div class="map-stage" id="map-stage">
+              <span class="route route-a"></span>
+              <span class="route route-b"></span>
+              <span class="route route-c"></span>
+              <button class="map-location" type="button" data-location="market" aria-label="السوق">
+                <span>🛒</span>
+              </button>
+              <button class="map-location" type="button" data-location="school" aria-label="المدرسة">
+                <span>🏫</span>
+              </button>
+              <button class="map-location" type="button" data-location="library" aria-label="المكتبة">
+                <span>📚</span>
+              </button>
+              <button class="map-location" type="button" data-location="court" aria-label="المحكمة">
+                <span>⚖</span>
+              </button>
+              <button class="map-location" type="button" data-location="desert" aria-label="الصحراء">
+                <span>⛺</span>
+              </button>
+              <button class="map-location" type="button" data-location="port" aria-label="الميناء">
+                <span>⚓</span>
+              </button>
+              <span class="unit patrol-unit" id="patrol-unit" aria-hidden="true">🚓</span>
+              <span class="unit meaning-unit" id="meaning-unit" aria-hidden="true">؟</span>
+            </div>
+          </aside>
+
+          <section class="challenge-panel" aria-label="تحدي المعنى">
+            <div class="challenge-meta">
+              <span id="skill-pill">السياق الدلالي</span>
+              <span id="difficulty-pill">المستوى 1</span>
+              <span id="root-pill">الجذر: ع ي ن</span>
+            </div>
+            <p class="sentence" id="sentence-text"></p>
+            <div class="word-brief">
+              <div>
+                <span>الكلمة المطلوبة</span>
+                <strong id="target-word">عين</strong>
+              </div>
+              <div>
+                <span>نوع الدلالة</span>
+                <strong id="meaning-type">حرفية</strong>
+              </div>
+              <button class="btn btn-hint" type="button" id="hint-button">
+                <span class="btn-icon" aria-hidden="true">📣</span>
+                بلاغ من العسكر
+                <small id="hint-count">3</small>
+              </button>
+            </div>
+            <div class="timer-meter" aria-hidden="true">
+              <span id="timer-meter-fill"></span>
+            </div>
+            <div class="choice-grid" id="choices-grid"></div>
+            <div class="feedback is-hidden" id="feedback-box" role="status">
+              <div class="feedback-icon" id="feedback-icon">✓</div>
+              <div>
+                <strong id="feedback-title">إجابة صحيحة</strong>
+                <p id="feedback-text"></p>
+              </div>
+              <button class="btn btn-primary" type="button" id="next-round-button">
+                <span class="btn-icon" aria-hidden="true">➜</span>
+                الجولة التالية
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="screen win-screen" id="win-screen" data-screen="win">
+        <div class="win-emblem" aria-hidden="true">🏅</div>
+        <p class="eyebrow">انتهت الدورية</p>
+        <h2 id="win-title">تم القبض على المعاني</h2>
+        <div class="score-summary">
+          <div>
+            <span>النقاط</span>
+            <strong id="final-score">0</strong>
+          </div>
+          <div>
+            <span>الدقة</span>
+            <strong id="final-accuracy">0%</strong>
+          </div>
+          <div>
+            <span>أفضل سلسلة</span>
+            <strong id="final-best-streak">0</strong>
+          </div>
+        </div>
+        <div class="badge-rack" id="badge-rack" aria-label="الشارات المكتسبة"></div>
+        <div class="screen-actions">
+          <button class="btn btn-primary" type="button" data-action="start">
+            <span class="btn-icon" aria-hidden="true">↻</span>
+            دورية جديدة
+          </button>
+          <button class="btn btn-ghost" type="button" data-action="leaderboard">
+            <span class="btn-icon" aria-hidden="true">🏆</span>
+            عرض الصدارة
+          </button>
+          <button class="btn btn-ghost" type="button" data-action="home">
+            <span class="btn-icon" aria-hidden="true">⌂</span>
+            الرئيسية
+          </button>
+        </div>
+      </section>
+
+      <section class="screen plain-screen leaderboard-screen" id="leaderboard-screen" data-screen="leaderboard">
+        <header class="screen-header">
+          <button class="icon-btn" type="button" data-action="home" aria-label="العودة للرئيسية">⌂</button>
+          <div>
+            <p class="eyebrow">سجل الدوريات</p>
+            <h2>لوحة الصدارة</h2>
+          </div>
+        </header>
+        <div class="leaderboard-list" id="leaderboard-list"></div>
+        <div class="screen-actions">
+          <button class="btn btn-primary" type="button" data-action="start">
+            <span class="btn-icon" aria-hidden="true">▶</span>
+            تحدي جديد
+          </button>
+          <button class="btn btn-ghost" type="button" id="clear-leaderboard">
+            <span class="btn-icon" aria-hidden="true">×</span>
+            مسح السجل
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
