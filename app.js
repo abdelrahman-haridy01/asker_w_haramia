@@ -892,9 +892,7 @@ const elements = {
   feedbackTitle: document.querySelector("#feedback-title"),
   feedbackText: document.querySelector("#feedback-text"),
   nextButton: document.querySelector("#next-round-button"),
-  patrolUnit: document.querySelector("#patrol-unit"),
-  meaningUnit: document.querySelector("#meaning-unit"),
-  mapLocations: document.querySelectorAll(".map-location"),
+  phaserStage: document.querySelector("#phaser-stage"),
   finalScore: document.querySelector("#final-score"),
   finalAccuracy: document.querySelector("#final-accuracy"),
   finalBestStreak: document.querySelector("#final-best-streak"),
@@ -930,6 +928,451 @@ const state = {
   hardCorrect: 0,
   fastCaptures: 0
 };
+
+const phaserMap = {
+  game: null,
+  scene: null,
+  pending: [],
+  motionEnabled: true,
+
+  ensure() {
+    if (!elements.phaserStage) {
+      return;
+    }
+
+    if (typeof Phaser === "undefined") {
+      elements.phaserStage.innerHTML = '<div class="phaser-fallback">تعذر تحميل Phaser. اتصل بالإنترنت أو شغّل الصفحة من GitHub Pages لعرض الخريطة المتحركة.</div>';
+      return;
+    }
+
+    if (this.game) {
+      this.resize();
+      return;
+    }
+
+    const sceneClass = createPatrolSceneClass();
+    const bounds = elements.phaserStage.getBoundingClientRect();
+    this.game = new Phaser.Game({
+      type: Phaser.AUTO,
+      parent: elements.phaserStage,
+      width: Math.max(320, Math.floor(bounds.width || 420)),
+      height: Math.max(280, Math.floor(bounds.height || 500)),
+      backgroundColor: "#efd9aa",
+      scale: {
+        mode: Phaser.Scale.RESIZE,
+        parent: elements.phaserStage
+      },
+      render: {
+        antialias: true,
+        pixelArt: false
+      },
+      scene: sceneClass
+    });
+  },
+
+  bindScene(scene) {
+    this.scene = scene;
+    this.scene.setMotion(this.motionEnabled);
+    while (this.pending.length) {
+      const [method, args] = this.pending.shift();
+      if (typeof this.scene[method] === "function") {
+        this.scene[method](...args);
+      }
+    }
+  },
+
+  call(method, ...args) {
+    if (this.scene && typeof this.scene[method] === "function") {
+      this.scene[method](...args);
+      return;
+    }
+
+    this.pending.push([method, args]);
+  },
+
+  resize() {
+    if (!this.game || !elements.phaserStage) {
+      return;
+    }
+
+    const bounds = elements.phaserStage.getBoundingClientRect();
+    if (bounds.width > 0 && bounds.height > 0) {
+      this.game.scale.resize(Math.floor(bounds.width), Math.floor(bounds.height));
+    }
+  },
+
+  setMotion(enabled) {
+    this.motionEnabled = enabled;
+    this.call("setMotion", enabled);
+  },
+
+  resetRound() {
+    this.call("resetRound");
+  },
+
+  movePatrol(location) {
+    this.call("movePatrol", location);
+  },
+
+  moveMeaning(location, outcome) {
+    this.call("moveMeaning", location, outcome);
+  },
+
+  activateLocation(locationId) {
+    this.call("activateLocation", locationId);
+  },
+
+  clearLocation() {
+    this.call("activateLocation", null);
+  }
+};
+
+let PatrolSceneClass = null;
+
+function createPatrolSceneClass() {
+  if (PatrolSceneClass) {
+    return PatrolSceneClass;
+  }
+
+  PatrolSceneClass = class PatrolScene extends Phaser.Scene {
+    constructor() {
+      super("PatrolScene");
+      this.motion = true;
+      this.activeLocationId = null;
+      this.currentPatrolLocation = getLocation("port");
+      this.currentMeaningLocation = null;
+      this.meaningState = null;
+    }
+
+    create() {
+      this.scale.on("resize", this.redraw, this);
+      this.redraw();
+      phaserMap.bindScene(this);
+    }
+
+    redraw() {
+      this.tweens.killAll();
+      this.children.removeAll(true);
+      this.drawMap();
+      this.drawLocations();
+      this.drawPatrol();
+      this.drawMeaning();
+      this.activateLocation(this.activeLocationId);
+    }
+
+    drawMap() {
+      const width = this.scale.width;
+      const height = this.scale.height;
+      const graphics = this.add.graphics();
+
+      graphics.fillStyle(0xefd9aa, 1);
+      graphics.fillRect(0, 0, width, height);
+
+      graphics.lineStyle(1, 0x172128, 0.08);
+      for (let x = 0; x <= width; x += 54) {
+        graphics.lineBetween(x, 0, x, height);
+      }
+      for (let y = 0; y <= height; y += 54) {
+        graphics.lineBetween(0, y, width, y);
+      }
+
+      this.drawRoad(graphics, "port", "court");
+      this.drawRoad(graphics, "court", "school");
+      this.drawRoad(graphics, "school", "market");
+      this.drawRoad(graphics, "court", "library");
+      this.drawRoad(graphics, "court", "desert");
+
+      graphics.fillStyle(0x68b4d9, 0.85);
+      graphics.fillRect(0, height * 0.78, width * 0.38, height * 0.22);
+      graphics.lineStyle(3, 0x3279a8, 0.7);
+      graphics.beginPath();
+      graphics.moveTo(0, height * 0.78);
+      for (let x = 0; x <= width * 0.38; x += 28) {
+        graphics.lineTo(x, height * 0.78 + Math.sin(x / 28) * 9);
+      }
+      graphics.strokePath();
+    }
+
+    drawRoad(graphics, fromId, toId) {
+      const from = this.pointFor(getLocation(fromId));
+      const to = this.pointFor(getLocation(toId));
+      graphics.lineStyle(30, 0x1c3d43, 0.35);
+      graphics.lineBetween(from.x, from.y, to.x, to.y);
+      graphics.lineStyle(4, 0xf4d56e, 0.8);
+      graphics.lineBetween(from.x, from.y, to.x, to.y);
+    }
+
+    drawLocations() {
+      this.locationNodes = new Map();
+      LOCATIONS.forEach((location) => {
+        const point = this.pointFor(location);
+        const node = this.add.container(point.x, point.y);
+        const ring = this.add.graphics();
+        const card = this.add.graphics();
+        const icon = this.add.text(0, -3, location.icon, {
+          fontFamily: "Tahoma, Arial",
+          fontSize: `${this.iconSize()}px`
+        }).setOrigin(0.5);
+        const label = this.add.text(0, this.nodeSize() / 2 + 18, location.name, {
+          fontFamily: "Tahoma, Arial",
+          fontSize: `${this.labelSize()}px`,
+          fontStyle: "bold",
+          color: "#172128",
+          backgroundColor: "#fff8e8",
+          padding: { x: 7, y: 3 }
+        }).setOrigin(0.5);
+        const zone = this.add.zone(0, 0, this.nodeSize() + 18, this.nodeSize() + 42)
+          .setInteractive({ useHandCursor: true });
+
+        ring.lineStyle(5, 0xd5423b, 0.9);
+        ring.strokeRoundedRect(
+          -this.nodeSize() / 2 - 8,
+          -this.nodeSize() / 2 - 8,
+          this.nodeSize() + 16,
+          this.nodeSize() + 16,
+          8
+        );
+        ring.setVisible(false);
+
+        card.fillStyle(this.locationColor(location.id), 1);
+        card.fillRoundedRect(-this.nodeSize() / 2, -this.nodeSize() / 2, this.nodeSize(), this.nodeSize(), 8);
+        card.lineStyle(3, 0x172128, 0.18);
+        card.strokeRoundedRect(-this.nodeSize() / 2, -this.nodeSize() / 2, this.nodeSize(), this.nodeSize(), 8);
+        card.fillStyle(0xffffff, 0.24);
+        card.fillRect(-this.nodeSize() / 2, -this.nodeSize() / 2, this.nodeSize(), this.nodeSize() * 0.42);
+
+        zone.on("pointerdown", () => this.pulseLocation(location.id));
+        zone.on("pointerover", () => this.tweenNode(node, 1.06));
+        zone.on("pointerout", () => this.tweenNode(node, 1));
+
+        node.add([ring, card, icon, label, zone]);
+        this.locationNodes.set(location.id, { node, ring });
+      });
+    }
+
+    drawPatrol() {
+      const point = this.pointFor(this.currentPatrolLocation);
+      const shadow = this.add.ellipse(0, 18, 48, 14, 0x172128, 0.25);
+      const car = this.add.text(0, 0, "🚓", {
+        fontFamily: "Tahoma, Arial",
+        fontSize: `${this.unitSize()}px`
+      }).setOrigin(0.5);
+      const red = this.add.circle(-9, -18, 4, 0xd5423b, 1);
+      const blue = this.add.circle(9, -18, 4, 0x2b74d6, 1);
+
+      this.patrol = this.add.container(point.x, point.y, [shadow, car, red, blue]);
+      this.tweens.add({
+        targets: [red, blue],
+        alpha: 0.25,
+        duration: 280,
+        yoyo: true,
+        repeat: -1
+      });
+    }
+
+    drawMeaning() {
+      const point = this.currentMeaningLocation
+        ? this.pointFor(this.currentMeaningLocation)
+        : this.centerPoint();
+      const color = this.meaningState === "captured"
+        ? 0x2f9e65
+        : this.meaningState === "escaped"
+          ? 0xd5423b
+          : 0x172128;
+
+      this.meaningCircle = this.add.graphics();
+      this.paintMeaningCircle(color);
+      const mark = this.add.text(0, -2, "؟", {
+        fontFamily: "Tahoma, Arial",
+        fontSize: `${this.meaningSize()}px`,
+        fontStyle: "bold",
+        color: "#ffffff"
+      }).setOrigin(0.5);
+
+      this.meaning = this.add.container(point.x, point.y, [this.meaningCircle, mark]);
+      if (!this.currentMeaningLocation && this.motion) {
+        this.tweens.add({
+          targets: this.meaning,
+          y: point.y - 8,
+          duration: 900,
+          ease: "Sine.easeInOut",
+          yoyo: true,
+          repeat: -1
+        });
+      }
+    }
+
+    paintMeaningCircle(color) {
+      this.meaningCircle.clear();
+      this.meaningCircle.fillStyle(color, 0.78);
+      this.meaningCircle.fillCircle(0, 0, this.meaningRadius());
+      this.meaningCircle.lineStyle(3, 0xffffff, 0.75);
+      this.meaningCircle.strokeCircle(0, 0, this.meaningRadius());
+    }
+
+    resetRound() {
+      this.currentPatrolLocation = getLocation("port");
+      this.currentMeaningLocation = null;
+      this.meaningState = null;
+      this.activeLocationId = null;
+      this.redraw();
+    }
+
+    movePatrol(location) {
+      this.currentPatrolLocation = location;
+      this.moveContainer(this.patrol, this.pointFor(location), 560);
+      this.pulseLocation(location.id);
+    }
+
+    moveMeaning(location, outcome) {
+      this.currentMeaningLocation = location;
+      this.meaningState = outcome;
+      if (this.meaning) {
+        this.tweens.killTweensOf(this.meaning);
+      }
+      this.paintMeaningCircle(outcome === "captured" ? 0x2f9e65 : 0xd5423b);
+      this.moveContainer(this.meaning, this.pointFor(location), 620);
+      if (this.motion) {
+        this.tweens.add({
+          targets: this.meaning,
+          scale: outcome === "captured" ? 1.28 : 1.16,
+          angle: outcome === "escaped" ? 8 : 0,
+          duration: 170,
+          yoyo: true,
+          repeat: 1
+        });
+      }
+    }
+
+    activateLocation(locationId) {
+      this.activeLocationId = locationId;
+      if (!this.locationNodes) {
+        return;
+      }
+
+      this.locationNodes.forEach(({ node, ring }, id) => {
+        ring.setVisible(id === locationId);
+        if (id !== locationId) {
+          node.setScale(1);
+        }
+      });
+      if (locationId) {
+        this.pulseLocation(locationId);
+      }
+    }
+
+    pulseLocation(locationId) {
+      const nodeEntry = this.locationNodes?.get(locationId);
+      if (!nodeEntry || !this.motion) {
+        return;
+      }
+
+      this.tweens.add({
+        targets: nodeEntry.node,
+        scale: 1.1,
+        duration: 130,
+        yoyo: true,
+        ease: "Sine.easeOut"
+      });
+    }
+
+    tweenNode(node, scale) {
+      if (!this.motion) {
+        return;
+      }
+
+      this.tweens.add({
+        targets: node,
+        scale,
+        duration: 120,
+        ease: "Sine.easeOut"
+      });
+    }
+
+    moveContainer(container, point, duration) {
+      if (!container) {
+        return;
+      }
+
+      if (!this.motion) {
+        container.setPosition(point.x, point.y);
+        return;
+      }
+
+      this.tweens.add({
+        targets: container,
+        x: point.x,
+        y: point.y,
+        duration,
+        ease: "Sine.easeInOut"
+      });
+    }
+
+    setMotion(enabled) {
+      this.motion = enabled;
+      if (!enabled) {
+        this.tweens.killAll();
+      }
+    }
+
+    pointFor(location) {
+      const width = this.scale.width;
+      const height = this.scale.height;
+      const x = width * ((100 - location.right) / 100);
+      const y = height * (location.top / 100);
+      const margin = this.nodeSize() / 2 + 12;
+
+      return {
+        x: Phaser.Math.Clamp(x, margin, width - margin),
+        y: Phaser.Math.Clamp(y, margin, height - margin - 16)
+      };
+    }
+
+    centerPoint() {
+      return {
+        x: this.scale.width * 0.48,
+        y: this.scale.height * 0.43
+      };
+    }
+
+    locationColor(id) {
+      return {
+        market: 0xffdfdc,
+        school: 0xdff2ea,
+        library: 0xe8e2ff,
+        court: 0xfff0c7,
+        desert: 0xffe4b2,
+        port: 0xdff0fb
+      }[id] || 0xfff8e8;
+    }
+
+    nodeSize() {
+      return this.scale.width < 380 ? 54 : 68;
+    }
+
+    iconSize() {
+      return this.scale.width < 380 ? 28 : 36;
+    }
+
+    unitSize() {
+      return this.scale.width < 380 ? 30 : 40;
+    }
+
+    meaningSize() {
+      return this.scale.width < 380 ? 28 : 36;
+    }
+
+    meaningRadius() {
+      return this.scale.width < 380 ? 24 : 30;
+    }
+
+    labelSize() {
+      return this.scale.width < 380 ? 12 : 14;
+    }
+  };
+
+  return PatrolSceneClass;
+}
 
 function init() {
   elements.roundCount.addEventListener("input", () => {
@@ -1032,6 +1475,7 @@ function saveSettings() {
   state.settings.animations = elements.animationToggle.checked;
 
   document.body.classList.toggle("reduced-motion", !state.settings.animations);
+  phaserMap.setMotion(state.settings.animations);
 
   try {
     localStorage.setItem(
@@ -1057,6 +1501,7 @@ function syncSettingsFromStorage() {
     elements.roundCountOutput.value = String(state.settings.rounds);
     elements.animationToggle.checked = state.settings.animations;
     document.body.classList.toggle("reduced-motion", !state.settings.animations);
+    phaserMap.setMotion(state.settings.animations);
     setMode(state.settings.mode);
   } catch (error) {
     console.warn("Unable to load settings", error);
@@ -1104,6 +1549,8 @@ function startGame() {
   state.fastCaptures = 0;
 
   showScreen("game");
+  phaserMap.ensure();
+  requestAnimationFrame(() => phaserMap.resize());
   updateHud();
   loadNextRound();
 }
@@ -1162,13 +1609,7 @@ function renderChallenge() {
   elements.nextButton.insertAdjacentHTML("afterbegin", '<span class="btn-icon" aria-hidden="true">➜</span>');
   elements.choicesGrid.innerHTML = "";
 
-  elements.mapLocations.forEach((button) => {
-    button.classList.remove("is-active");
-  });
-
-  moveUnit(elements.patrolUnit, getLocation("port"));
-  setMeaningAtCenter();
-  elements.meaningUnit.classList.remove("is-captured", "is-escaped");
+  resetMapForRound();
 
   state.currentChoiceMap.forEach(({ choice, location }, index) => {
     const button = document.createElement("button");
@@ -1242,7 +1683,7 @@ function answerChoice(choice, button) {
   }
 
   if (selectedMap) {
-    moveUnit(elements.patrolUnit, selectedMap.location);
+    phaserMap.movePatrol(selectedMap.location);
     activateLocation(selectedMap.location.id);
   }
 
@@ -1258,15 +1699,13 @@ function answerChoice(choice, button) {
     if (getRemainingTime() / state.roundLimit > 0.62) {
       state.fastCaptures += 1;
     }
-    moveUnit(elements.meaningUnit, correctMap.location);
-    elements.meaningUnit.classList.add("is-captured");
+    phaserMap.moveMeaning(correctMap.location, "captured");
     showFeedback("correct", "تم القبض على المعنى", `${challenge.feedback} +${points} نقطة`);
     awardConditionalBadges();
   } else {
     state.missed += 1;
     state.streak = 0;
-    moveUnit(elements.meaningUnit, correctMap.location);
-    elements.meaningUnit.classList.add("is-escaped");
+    phaserMap.moveMeaning(correctMap.location, "escaped");
     activateLocation(correctMap.location.id);
     const selectedText = choice ? `ليس المقصود "${choice}". ` : "انتهى الوقت قبل القبض على المعنى. ";
     showFeedback("wrong", "المعنى أفلت", `${selectedText}الإجابة الصحيحة: ${challenge.correctMeaning}. ${challenge.feedback}`);
@@ -1465,22 +1904,15 @@ function highlightTarget(sentence, word) {
 }
 
 function activateLocation(locationId) {
-  elements.mapLocations.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.location === locationId);
-  });
-
   const location = getLocation(locationId);
   elements.districtName.textContent = location.name;
+  phaserMap.activateLocation(locationId);
 }
 
-function moveUnit(unit, location) {
-  unit.style.top = `${location.top}%`;
-  unit.style.right = `${location.right}%`;
-}
-
-function setMeaningAtCenter() {
-  elements.meaningUnit.style.top = "43%";
-  elements.meaningUnit.style.right = "52%";
+function resetMapForRound() {
+  elements.districtName.textContent = "بلاغ مفتوح";
+  phaserMap.resetRound();
+  phaserMap.clearLocation();
 }
 
 function getLocation(locationId) {

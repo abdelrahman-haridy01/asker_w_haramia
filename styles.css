@@ -176,7 +176,7 @@ button {
 .icon-btn:focus-visible,
 .segment:focus-visible,
 .choice-card:focus-visible,
-.map-location:focus-visible {
+.phaser-stage:focus-visible {
   outline: 3px solid rgba(43, 116, 214, 0.36);
   outline-offset: 3px;
 }
@@ -659,133 +659,30 @@ select:focus {
     #efd9aa;
 }
 
-.route {
+.phaser-stage {
   position: absolute;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(22, 48, 56, 0.42);
-  transform-origin: center;
+  inset: 0;
+  min-height: 100%;
+  overflow: hidden;
 }
 
-.route-a {
-  width: 54%;
-  top: 31%;
-  right: 20%;
-  transform: rotate(-20deg);
+.phaser-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-.route-b {
-  width: 58%;
-  top: 57%;
-  right: 18%;
-  transform: rotate(22deg);
-}
-
-.route-c {
-  width: 62%;
-  top: 44%;
-  right: -3%;
-  transform: rotate(89deg);
-}
-
-.map-location {
-  position: absolute;
+.phaser-fallback {
+  height: 100%;
+  min-height: 500px;
   display: grid;
   place-items: center;
-  width: 72px;
-  height: 72px;
-  border: 3px solid rgba(23, 33, 40, 0.2);
-  border-radius: var(--radius);
-  background: #fff8e8;
-  box-shadow: 0 8px 0 rgba(23, 33, 40, 0.12);
-  transform: translate(50%, -50%);
-}
-
-.map-location span {
-  font-size: 2.1rem;
-}
-
-.map-location.is-active {
-  border-color: var(--red);
-  box-shadow: 0 0 0 6px rgba(213, 66, 59, 0.16), 0 8px 0 rgba(23, 33, 40, 0.12);
-}
-
-.map-location[data-location="market"] {
-  top: 21%;
-  right: 75%;
-  background: #ffe0dc;
-}
-
-.map-location[data-location="school"] {
-  top: 19%;
-  right: 38%;
-  background: #dff2ea;
-}
-
-.map-location[data-location="library"] {
-  top: 39%;
-  right: 15%;
-  background: #e8e2ff;
-}
-
-.map-location[data-location="court"] {
-  top: 59%;
-  right: 48%;
-  background: #fff0c7;
-}
-
-.map-location[data-location="desert"] {
-  top: 77%;
-  right: 72%;
-  background: #ffe4b2;
-}
-
-.map-location[data-location="port"] {
-  top: 78%;
-  right: 24%;
-  background: #dff0fb;
-}
-
-.unit {
-  position: absolute;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  width: 54px;
-  height: 54px;
-  transform: translate(50%, -50%);
-  transition:
-    top 520ms ease,
-    right 520ms ease,
-    opacity 260ms ease,
-    scale 220ms ease;
-}
-
-.patrol-unit {
-  top: 78%;
-  right: 24%;
-  font-size: 2.35rem;
-  filter: drop-shadow(0 6px 5px rgba(23, 33, 40, 0.35));
-}
-
-.meaning-unit {
-  top: 42%;
-  right: 52%;
-  border-radius: 50%;
+  padding: 18px;
   color: #fff;
-  background: rgba(23, 33, 40, 0.74);
-  font-size: 1.9rem;
-  animation: meaningFloat 1.8s ease-in-out infinite;
-}
-
-.meaning-unit.is-captured {
-  background: var(--green);
-  animation: capturePop 460ms ease both;
-}
-
-.meaning-unit.is-escaped {
-  background: var(--red);
-  animation: escapeShake 420ms ease both;
+  background: var(--night);
+  text-align: center;
+  line-height: 1.8;
+  font-weight: 900;
 }
 
 .challenge-panel {
@@ -1385,28 +1282,6 @@ body.reduced-motion *::after {
 
   .map-stage {
     min-height: 280px;
-  }
-
-  .map-location {
-    width: 56px;
-    height: 56px;
-  }
-
-  .map-location span {
-    font-size: 1.6rem;
-  }
-
-  .unit {
-    width: 44px;
-    height: 44px;
-  }
-
-  .patrol-unit {
-    font-size: 1.85rem;
-  }
-
-  .meaning-unit {
-    font-size: 1.45rem;
   }
 
   .sentence {

@@ -273,29 +273,7 @@
               <strong id="district-name">السوق</strong>
             </div>
             <div class="map-stage" id="map-stage">
-              <span class="route route-a"></span>
-              <span class="route route-b"></span>
-              <span class="route route-c"></span>
-              <button class="map-location" type="button" data-location="market" aria-label="السوق">
-                <span>🛒</span>
-              </button>
-              <button class="map-location" type="button" data-location="school" aria-label="المدرسة">
-                <span>🏫</span>
-              </button>
-              <button class="map-location" type="button" data-location="library" aria-label="المكتبة">
-                <span>📚</span>
-              </button>
-              <button class="map-location" type="button" data-location="court" aria-label="المحكمة">
-                <span>⚖</span>
-              </button>
-              <button class="map-location" type="button" data-location="desert" aria-label="الصحراء">
-                <span>⛺</span>
-              </button>
-              <button class="map-location" type="button" data-location="port" aria-label="الميناء">
-                <span>⚓</span>
-              </button>
-              <span class="unit patrol-unit" id="patrol-unit" aria-hidden="true">🚓</span>
-              <span class="unit meaning-unit" id="meaning-unit" aria-hidden="true">؟</span>
+              <div class="phaser-stage" id="phaser-stage" role="img" aria-label="مشهد Phaser لخريطة عسكر المعاني"></div>
             </div>
           </aside>
 
@@ -397,6 +375,7 @@
       </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js" defer></script>
     <script src="app.js" defer></script>
   </body>
 </html>
